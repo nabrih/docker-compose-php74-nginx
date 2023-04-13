@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - '8888:80'
+    volumes:
+      - ./src:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php-fpm
+  php-fpm:
+    build:
+      context: './php'
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '2G'
+        reservations:
+          cpus: '0.05'
+          memory: '512M'
